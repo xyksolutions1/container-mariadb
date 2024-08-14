@@ -1,3 +1,9 @@
+## 10.6-4.2.14 2024-08-14 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 10.6.19
+
+
 ## 10.6-4.2.13 2024-05-17 <dave at tiredofit dot ca>
 
    ### Added

@@ -1,3 +1,11 @@
+## 10.11-4.2.16 2024-11-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 10.11.10
+      - MySQLTuner 2.6.0
+      - Pin to tiredofit/alpine:7.10.17
+
+
 ## 10.11-4.2.15 2024-08-14 <dave at tiredofit dot ca>
 
    ### Added

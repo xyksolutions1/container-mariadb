@@ -1,3 +1,9 @@
+## 11.4-4.2.17 2024-11-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 11.4.4
+
+
 ## 10.11-4.2.16 2024-11-04 <dave at tiredofit dot ca>
 
    ### Added

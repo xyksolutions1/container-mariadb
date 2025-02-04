@@ -1,5 +1,5 @@
 ARG DISTRO=alpine
-ARG DISTRO_VARIANT=3.20-7.10.17
+ARG DISTRO_VARIANT=3.20-7.10.27
 
 FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
@@ -7,7 +7,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 ARG MARIADB_VERSION
 ARG MYSQLTUNER_VERSION
 
-ENV MARIADB_VERSION=${MARIADB_VERSION:-"10.11.10"} \
+ENV MARIADB_VERSION=${MARIADB_VERSION:-"10.11.11"} \
     MYSQLTUNER_VERSION=${MYSQLTUNER_VERSION:-"v2.6.0"} \
     MARIADB_REPO_URL=https://github.com/MariaDB/server \
     MYSQLTUNER_REPO_URL=https://github.com/major/MySQLTuner-perl \

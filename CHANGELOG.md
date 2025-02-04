@@ -1,3 +1,10 @@
+## 10.11-4.2.17 2025-02-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - Pin to tiredofit/alpine:3.20-7.10.27
+      - MariaDB 10.11.11
+
+
 ## 10.11-4.2.16 2024-11-04 <dave at tiredofit dot ca>
 
    ### Added

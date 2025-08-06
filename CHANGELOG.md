@@ -1,3 +1,9 @@
+## 11.4-3.2.21 2025-08-06 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 11.4.8
+
+
 ## 11.4-3.2.20 2025-05-22 <dave at tiredofit dot ca>
 
    ### Added

@@ -7,7 +7,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 ARG MARIADB_VERSION
 ARG MYSQLTUNER_VERSION
 
-ENV MARIADB_VERSION=${MARIADB_VERSION:-"10.6.22"} \
+ENV MARIADB_VERSION=${MARIADB_VERSION:-"10.6.23"} \
     MYSQLTUNER_VERSION=${MYSQLTUNER_VERSION:-"v2.6.0"} \
     MARIADB_REPO_URL=https://github.com/MariaDB/server \
     MYSQLTUNER_REPO_URL=https://github.com/major/MySQLTuner-perl \

@@ -5,6 +5,33 @@ prepare_service
 # shellcheck disable=SC2034
 PROCESS_NAME="mariadb"
 
+cat <<EOF
+
+*****************************************************************************************
+*                                                                                       *
+*                    END OF LIFE NOTICE AUGUST 18, 2025                                 *
+*                               tiredofit/mariadb                                       *
+*                                                                                       *
+* This image is no longer maintained as of and will not receive updates.                *
+*                                                                                       *
+* A successor image is available at:                                                    *
+*                                                                                       *
+* Repository | Documentation:                                                           *
+*   - https://github.com/nfrastack/container-mariadb                                    *
+*                                                                                       *
+* Image Registries:                                                                     *
+*   - https://hub.docker.com/r/nfrastack/mariadb                                        *
+*   - https://github.com/nfrastack/container-mariadb/pkgs/container/container-mariadb   *
+*                                                                                       *
+* Please visit https://nfrastack.com for more information.                              *
+*                                                                                       *
+*****************************************************************************************
+
+EOF
+
+sleep 15
+
+
 bootstrap_filesystem
 bootstrap_variables
 configure_mariadb

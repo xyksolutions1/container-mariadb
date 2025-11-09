@@ -1,3 +1,8 @@
+## 11.4-3.2.99 2025-11-09 <dave at tiredofit dot ca>
+
+Add EOL notice and deprecate image
+
+
 ## 11.4-3.2.21 2025-08-06 <dave at tiredofit dot ca>
 
    ### Added

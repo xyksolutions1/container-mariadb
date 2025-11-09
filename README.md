@@ -59,7 +59,7 @@ Example:
 
 `ghcr.io/nfrastack/container-replace:11.8-1.0` or optionally
 
-`ghcr.io/nfrastack/container-replace:11-8-1.0-alpine` or optinally
+`ghcr.io/nfrastack/container-replace:11.8-1.0-alpine` or optinally
 
 
 - The `branch` will relate to the MAJOR eg `11` and MINOR `.8` release.

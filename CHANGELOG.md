@@ -1,56 +1,78 @@
-## 10.6-3.2.99 2025-11-09 <dave at tiredofit dot ca>
-
-Add EOL notice and deprecate image
-
-
-## 10.6-3.2.18 2025-08-06 <dave at tiredofit dot ca>
+## 11.8-4.0.0pre 2025-11-09 <code at nfrastack dot com>
 
    ### Added
-      - MariaDB 10.6.23
+      - Change base image
+      - Change environment variables
+      - Change paths
+      - Change config structure
+      - MariaDB 11.8.4
 
-
-## 10.6-3.2.17 2025-05-08 <dave at tiredofit dot ca>
-
-   ### Added
-      - MariaDB 10.6.22
-      - Pin to tiredofit/alpine 7.10.30
-
-
-## 10.6-3.2.16 2025-02-04 <dave at tiredofit dot ca>
+## 11.8-3.2.21 2025-08-06 <dave at tiredofit dot ca>
 
    ### Added
-      - Pin to tiredofit/alpine:3.20-7.10.27
-      - MariaDB 10.6.21
+      - MariaDB 11.8.3
 
 
-## 10.6-4.2.15 2024-11-04 <dave at tiredofit dot ca>
-
-   ### Added
-      - MariaDB 10.6.20
-      - MySQL Tuner 2.6.0
-      - Pin to tiredofit:alpine:7.10.17
-
-
-## 10.6-4.2.14 2024-08-14 <dave at tiredofit dot ca>
+## 11.8-3.2.21 2025-05-22 <dave at tiredofit dot ca>
 
    ### Added
-      - MariaDB 10.6.19
+      - MariaDB 11.4.7
 
 
-## 10.6-4.2.13 2024-05-17 <dave at tiredofit dot ca>
-
-   ### Added
-      - MariaDB 10.6.18
-
-
-## 10.6-4.2.12 2024-02-08 <dave at tiredofit dot ca>
+## 11.4-4.2.19 2025-05-08 <dave at tiredofit dot ca>
 
    ### Added
-      - MariaDB 10.6.17
-      - MysqlTuner 2.5.2
+      - MariaDB 11.4.6
+      - Pin to tiredofit/alpine:7.10.31
 
 
-## 10.6-4.2.11 2024-01-11 <dave at tiredofit dot ca>
+## 11.4-4.2.18 2025-02-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 11.45
+      - Pin to tiredofit/alpine:3.21-7.10.28
+
+
+## 11.4-4.2.17 2024-11-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 11.4.4
+
+
+## 10.11-4.2.16 2024-11-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 10.11.10
+      - MySQLTuner 2.6.0
+      - Pin to tiredofit/alpine:7.10.17
+
+
+## 10.11-4.2.15 2024-08-14 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 10.11.9
+
+
+## 10.11-4.2.14 2024-07-05 <dave at tiredofit dot ca>
+
+   ### Added
+      - Alpine 3.20 base
+
+
+## 10.11-4.2.13 2024-05-17 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 10.11.8
+
+
+## 10.11-4.2.12 2024-02-08 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 10.11.7
+      - MySQLTuner 2.5.2
+
+
+## 10.11-4.2.11 2024-01-11 <dave at tiredofit dot ca>
 
 All users are recommended to upgrade immediately to resolve a performance issue.
 
@@ -59,78 +81,79 @@ All users are recommended to upgrade immediately to resolve a performance issue.
       - Properly read default environment variables when starting mariadb engine
 
 
-## 10.6-4.2.10 2023-12-08 <dave at tiredofit dot ca>
+## 10.11-4.2.10 2023-12-08 <dave at tiredofit dot ca>
 
    ### Added
       - Change base image to tiredofit/alpine:3.19
 
 
-## 10.6-4.2.9 2023-11-27 <dave at tiredofit dot ca>
+## 10.11-4.2.9 2023-11-27 <dave at tiredofit dot ca>
 
    ### Changed
-      - Fix issue with 4.2.8 and allow both 127.0.0.1 AND localhost permissions
-      - Fix issue with Root password not being written properly from 4.0.0 release
+      - Fix 4.2.8 to allow 127.0.01 and localhost concurrently
+      - Fix issue where root password wasn't written properly
 
 
-## 10.6-4.2.8 2023-11-23 <dave at tiredofit dot ca>
-
-   ### Changed
-      - Switch 'localhost' to 127.0.0.1
-
-
-## 10.6-4.2.7 2023-11-20 <dave at tiredofit dot ca>
+## 10.11-4.2.8 2023-11-23 <dave at tiredofit dot ca>
 
    ### Changed
-      - Fix issue with being able to create new databases
+      - Change localhost permissions to 127.0.0.1
 
 
-## 10.6-4.2.6 2023-11-20 <dave at tiredofit dot ca>
+## 10.11-4.2.7 2023-11-20 <dave at tiredofit dot ca>
 
    ### Changed
-      - Fix for MariaDB startup
+      - Fix issues with creating new databases on first install
 
 
-## 10.6-4.2.5 2023-11-14 <dave at tiredofit dot ca>
+## 10.11-4.2.6 2023-11-20 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix MariaDB startup routine
+
+
+## 10.11-4.2.5 2023-11-14 <dave at tiredofit dot ca>
 
    ### Added
-      - MariaDB 10.6.16
+      - armv8/aarch64 support
       - MySQL Tuner 2.2.12
+      - MariaDB 10.11.6
 
 
-## 10.6-4.2.4 2023-08-14 <dave at tiredofit dot ca>
-
-   ### Added
-      - MariaDB 10.6.15
-
-
-## 10.6-4.2.3 2023-06-07 <dave at tiredofit dot ca>
+## 10.11-4.2.4 2023-08-14 <dave at tiredofit dot ca>
 
    ### Added
-      - MariaDB 10.6.14
+      - MariaDB 10.11.5
 
 
-## 10.6-4.2.2 2023-05-17 <dave at tiredofit dot ca>
+## 10.11-4.2.3 2023-06-07 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 10.11.4
+
+
+## 10.11-4.2.2 2023-05-17 <dave at tiredofit dot ca>
 
    ### Changed
       - Add additional failsafe GRANT statement for zbx_monitor access
 
 
-## 10.6-4.2.1 2023-05-10 <dave at tiredofit dot ca>
+## 10.11-4.2.1 2023-05-10 <dave at tiredofit dot ca>
 
-   ### Added
+   ### Changed
       - Alpine 3.18 base
 
 
-## 10.6-4.2.0 2023-04-26 <dave at tiredofit dot ca>
+## 10.11-4.2.0 2023-04-26 <dave at tiredofit dot ca>
 
    ### Added
       - Add support for _FILE environment variables
 
 
-## 10.6-4.1.1 2023-04-12 <dave at tiredofit dot ca>
+## 10.11-4.1.1 2023-04-12 <dave at tiredofit dot ca>
 
-   ### Changed
-      - Add additional FLUSH PRIVILEGES statement for Zabbix monitoring
+   ### Added
+      - Add additional FLUSH PRIVILEGES statement as a safety net when monitoring
 
 
 ## 4.1.0 2023-03-30 <dave at tiredofit dot ca>
@@ -140,21 +163,21 @@ All users are recommended to upgrade immediately to resolve a performance issue.
       - Add DB_BACKUP_ARCHIVE_TIME and DB_BACKUP_DUMP_TARGET_ARCHIVE to move backups into archive folder after however many minutes for better external backups
 
 
-## 10.6-4.0.2 2023-03-21 <dave at tiredofit dot ca>
+## 10.11-4.0.2 2023-03-21 <dave at tiredofit dot ca>
 
    ### Changed
       - Revert mariadb_autoreg to mariadb
 
 
-## 10.6-4.0.1 2023-03-14 <dave at tiredofit dot ca>
+## 10.11-4.0.1 2023-03-14 <dave at tiredofit dot ca>
 
    ### Changed
       - Strip TCP check on mysql_upgrade
       - Change Autoregister to mariadbmodern
-      - Strip suffix from IMAGE_NAME
+      - Remove IMAGE_NAME suffix
 
 
-## 10.6-4.0.0 2023-02-08 <dave at tiredofit dot ca>
+## 10.11-4.0.0 2023-02-08 <dave at tiredofit dot ca>
 
 Major rewrite to the entire image bringing in a revamped way of dealing with multiple databases and users, bringing backup functionality up to parity with tiredofit/db-backup. Massive improvements with monitoring and safer initialization routines.
 Compatibility with older versions is possible, with the exception of DB Backup routines all being prefixed with DB_BACKUP_
@@ -175,67 +198,40 @@ Compatibility with older versions is possible, with the exception of DB Backup r
       - Rewrite Zabbix templates
 
 
-## 10.6-3.12 2023-02-08 <dave at tiredofit dot ca>
-
-   ### Changed
-      - Isolate some db backup routines from container initialization
-
-
-## 10.6-3.11.10 2023-02-06 <dave at tiredofit dot ca>
-
-   ### Added
-      - MariaDB 10.6.12
-
-
-## 3.11.9 2022-11-23 <dave at tiredofit dot ca>
+## 3.12.4 2022-11-23 <dave at tiredofit dot ca>
 
    ### Added
       - Alpine 3.17 Base
 
 
-## 3.11.8 2022-11-07 <dave at tiredofit dot ca>
-
-   ### Added
-      - Maria DB 10.6.11
-
-
-## 3.11.7 2022-10-19 <dave at tiredofit dot ca>
-
-   ### Changed
-      - Fix Zabbix 'mysql.ping' command
-
-
-## 3.11.6 2022-10-19 <dave at tiredofit dot ca>
+## 3.12.3 2022-10-19 <dave at tiredofit dot ca>
 
    ### Changed
       - Fix for LOG_PATH environment variable
 
 
-## 3.11.5 2022-10-19 <dave at tiredofit dot ca>
+## 3.12.2 2022-10-19 <dave at tiredofit dot ca>
 
    ### Changed
       - Fix for logrotate and logshipping not working properly
 
 
-## 3.11.4 2022-10-03 <dave at tiredofit dot ca>
+## 3.12.1 2022-10-03 <dave at tiredofit dot ca>
 
    ### Added
-      - Add LISTEN_PORT environment variable
-
-   ### Changed
-      - Clean up code
+      - Add LISTEN_PORT variable
 
 
-## 3.11.3 2022-10-02 <dave at tiredofit dot ca>
+## 3.12.0 2022-10-03 <dave at tiredofit dot ca>
 
-   ### Changed
-      - Patchup for 3.11.2
+   ### Added
+      - MariaDB 10.11.0
 
 
 ## 3.11.2 2022-10-02 <dave at tiredofit dot ca>
 
    ### Changed
-      - Patch for 3.11.1
+      - Patchup for 3.11.1
 
 
 ## 3.11.1 2022-10-02 <dave at tiredofit dot ca>
@@ -254,65 +250,88 @@ Compatibility with older versions is possible, with the exception of DB Backup r
       - Rework version upgrades, only execute on MAJOR version changes, yet still log minor release changes
 
 
-## 3.10.17 2022-09-30 <dave at tiredofit dot ca>
+## 3.10.21 2022-09-30 <dave at tiredofit dot ca>
 
    ### Added
-      - Add EXTRA_ARGUMENTS option
+      - Add EXTRA_ARGUMENTS variable
 
 
-## 3.10.16 2022-09-23 <dave at tiredofit dot ca>
-
-   ### Added
-      - MariaDB 10.6.10
-
-
-## 3.10.15 2022-08-26 <dave at tiredofit dot ca>
+## 3.10.20 2022-08-26 <dave at tiredofit dot ca>
 
    ### Added
-      - MariaDB 10.6.9
+      - MariaDB 10.10.1 RC
 
 
-## 3.10.14 2022-07-04 <dave at tiredofit dot ca>
+## 3.10.19 2022-08-26 <dave at tiredofit dot ca>
 
    ### Added
-      - MysqlTuner 1.9.9
+      - MariaDB 10.9.2
+
+
+## 3.10.18 2022-08-26 <dave at tiredofit dot ca>
+
+   ### Added
+      - MariaDB 10.8.4
+
+
+## 3.10.17 2022-07-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - MySQLTuner 1.9.9
+
+
+## 3.10.16 2022-06-21 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Zabbix Agent socket fix
+
+
+## 3.10.15 2022-06-21 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix Image Name environment variable
+
+
+## 3.10.14 2022-06-21 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Remove static Zabbix configuration
 
 
 ## 3.10.13 2022-06-21 <dave at tiredofit dot ca>
 
    ### Changed
-      - Fix for Zabbix Agent
+      - Fix for socket path and file
 
 
-## 3.10.12 2022-06-21 <dave at tiredofit dot ca>
+## 3.10.12 2022-06-18 <dave at tiredofit dot ca>
+
+   ### Added
+
+
+## 3.10.11 2022-05-25 <dave at tiredofit dot ca>
 
    ### Changed
-      - Remove Static Zabbix Configuration
-      - Fix for socket path and socket file
+      - Bugfix in Image name
 
 
-## 3.10.11 2022-06-18 <dave at tiredofit dot ca>
-
-   ### Added
-
-
-## 3.10.10 2022-06-18 <dave at tiredofit dot ca>
+## 3.10.10 2022-05-24 <dave at tiredofit dot ca>
 
    ### Added
-      - Add customizable socket path and file
+      - MariaDB 10.8.3
 
 
 ## 3.10.9 2022-05-24 <dave at tiredofit dot ca>
 
    ### Added
+      - MariaDB 10.7.4
       - Alpine 3.16 base
-      - MariaDB 10.6.8
 
 
 ## 3.10.8 2022-04-06 <dave at tiredofit dot ca>
 
    ### Added
-      - Patchup for /tmp/state files location change
+      - Patchup for db-backup tmp state files
 
 
 ## 3.10.7 2022-03-04 <dave at tiredofit dot ca>

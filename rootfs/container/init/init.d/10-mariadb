@@ -1,0 +1,16 @@
+#!/command/with-contenv bash
+# SPDX-FileCopyrightText: © 2025 Nfrastack <code@nfrastack.com>
+#
+# SPDX-License-Identifier: MIT
+
+source /container/base/functions/container/init
+SERVICE_NAME="mariadb"
+
+prepare_service
+mariadb_bootstrap_filesystem
+mariadb_bootstrap_variables
+mariadb_configure_daemon
+mariadb_initialize_engine
+mariadb_create_databases
+mariadb_configure_monitoring
+liftoff

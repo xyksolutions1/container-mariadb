@@ -1,0 +1,18 @@
+#!/command/with-contenv bash
+# SPDX-FileCopyrightText: © 2025 Nfrastack <code@nfrastack.com>
+#
+# SPDX-License-Identifier: MIT
+
+source /container/base/functions/container/init
+SERVICE_NAME="mariadb"
+
+prepare_service
+check_container_initialized
+check_service_initialized init
+liftoff
+
+if [ -n "${MARIADBD_ARGS}" ]; then start_string="with extra arguments '${MARIADBD_ARGS}'" ; fi
+print_start "Starting MariaDB $(mariadb --version | awk '{print $3}' | cut -d'-' -f1) ${start_string}"
+silent exec s6-setuidgid mariadb \
+                                    /usr/bin/mariadbd \
+                                                    ${MARIADBD_ARGS} --console

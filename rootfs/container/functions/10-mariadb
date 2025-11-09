@@ -1,0 +1,367 @@
+
+# SPDX-FileCopyrightText: © 2025 Nfrastack <code@nfrastack.com>
+#
+# SPDX-License-Identifier: MIT
+
+mariadb_bootstrap_filesystem() {
+    create_folder \
+                    "${CERT_PATH},\
+                    ${CONFIG_PATH},\
+                    ${DATA_PATH},\
+                    ${SOCKET_PATH},\
+                    ${LOG_PATH}" \
+                    mariadb:mariadb 770
+
+    if [ "${DATA_PATH%/}" != "/var/lib/mariadb" ] ; then
+        rm -rf /var/lib/mariadb
+        ln -sf "${DATA_PATH%/}" /var/lib/mariadb
+    fi
+}
+
+mariadb_bootstrap_variables() {
+    transform_var file \
+                        MYSQL_DATABASE \
+                        MYSQL_PASSWORD \
+                        MYSQL_ROOT_PASSWORD \
+                        MYSQL_USER
+
+    if [ -n "${MYSQL_ROOT_PASSWORD}" ]; then
+        ROOT_PASS=${MYSQL_ROOT_PASSWORD}
+    fi
+
+    if [ -n "${MYSQL_DATABASE}" ]; then
+        DB_NAME=${MYSQL_DATABASE}
+    fi
+
+    if [ -n "${MYSQL_USER}" ]; then
+        DB_USER=${MYSQL_USER}
+    fi
+
+    if [ -n "${MYSQL_PASSWORD}" ]; then
+        DB_PASS=${MYSQL_PASSWORD}
+    fi
+
+    transform_var file \
+                        MARIADB_DATABASE \
+                        MARIADB_PASSWORD \
+                        MARIADB_ROOT_PASSWORD \
+                        MARIADB_USER
+
+    if [ -n "${MARIADB_ROOT_PASSWORD}" ]; then
+        ROOT_PASS=${MYSQL_ROOT_PASSWORD}
+    fi
+
+    if [ -n "${MARIDB_DATABASE}" ]; then
+        DB_NAME=${MYSQL_DATABASE}
+    fi
+
+    if [ -n "${MARIADB_USER}" ]; then
+        DB_USER=${MYSQL_USER}
+    fi
+
+    if [ -n "$MARIADB_PASSWORD" ]; then
+        DB_PASS=${MYSQL_PASSWORD}
+    fi
+
+    transform_var file \
+                        ROOT_PASS
+}
+
+mariadb_configure_daemon() {
+    core="${CONFIG_PATH%/}"/00-core.cnf
+    update_config() {
+        # Usage: update_config <section.option|option> <value> <config_file>
+        local k="$2"
+        local v="$3"
+        local f="$1"
+
+        if [[ "$k" == *.* ]]; then
+            local s="${k%%.*}"
+            local o="${k#*.}"
+            sed -i "/^\[$s\]/,/^\[/ {/^[^[]/ s|^$o[ ]*=.*|$o = $v|}" "$f"
+        else
+            local o="$k"
+            sed -i "s|^$o[ ]*=.*|$o = $v|" "$f"
+        fi
+    }
+
+    case "${CONFIG_PROFILE,,}" in
+        blank | none | false )
+            mariadb_conf=blank.cnf
+        ;;
+        standard )
+            mariadb_conf=standard.cnf
+        ;;
+        default | *)
+            mariadb_conf=default.cnf
+        ;;
+    esac
+
+    cat <<EOF | silent tee /etc/my.cnf
+!includedir ${CONFIG_PATH%/}/
+EOF
+    if [ ! -f "${CONFIG_PATH%/}"/00-core.cnf ] ; then
+        cp -aR /container/data/mariadb/core.cnf "${CONFIG_PATH%/}"/00-core.cnf
+    fi
+
+    if [ ! -f "${CONFIG_PATH%/}/${CONFIG_FILE}" ] && [[ ! "${CONFIG_PROFILE,,}" =~ ^(blank|none|false)$ ]]; then
+        cp -aR "/container/data/mariadb/${mariadb_conf}" "${CONFIG_PATH%/}/${CONFIG_FILE}"
+        chown mariadb:mariadb "${CONFIG_PATH%/}"/"${CONFIG_FILE}"
+    fi
+
+    #chown mariadb:mariadb "${CONFIG_PATH%/}"/"${CONFIG_FILE}"
+#    update_template "${CONFIG_PATH%/}"/"${CONFIG_FILE}" \
+#                                                        DATA_PATH \
+#                                                        DB_CHARACTER_SET \
+#                                                        DB_COLLATION \
+#                                                        LISTEN_PORT \
+#                                                        LOG_FILE_ERROR \
+#                                                        LOG_FILE_GENERAL_QUERY \
+#                                                        LOG_FILE_SLOW_QUERY \
+#                                                        LOG_PATH \
+#                                                        SOCKET_FILE \
+#                                                        SOCKET_PATH
+
+    update_config ${core} port "${LISTEN_PORT}"
+    update_config ${core} socket "${SOCKET_PATH%/}/${SOCKET_FILE}"
+    update_config ${core} default-character-set "${DB_CHARACTER_SET}"
+    update_config ${core} datadir "${DATA_PATH%/}"
+    update_config ${core} collation-server "${DB_COLLATION}"
+    update_config ${core} character-set-server "${DB_CHARACTER_SET}"
+    update_config ${core} general_log_file "${LOG_PATH%/}/${LOG_FILE_GENERAL_QUERY}"
+    update_config ${core} log_error "${LOG_PATH%/}/${LOG_FILE_ERROR}"
+    update_config ${core} slow_query_log_file "${LOG_PATH%/}/${LOG_FILE_SLOW_QUERY}"
+    update_config ${core} log_warnings "${LOG_LEVEL}"
+
+    if var_true "${ENABLE_LOG_ERROR}" ; then
+        create_logrotate mariadb-error "${LOG_PATH}"/"${LOG_FILE_ERROR}" mariadb-error mariadb mariadb
+    else
+        sed -i -e "s|log_error = .*|log_error = /dev/null|g" ${core}
+    fi
+
+    if var_true "${ENABLE_LOG_GENERAL_QUERY}" ; then
+        truefalse_onezero ENABLE_LOG_GENERAL_QUERY
+        update_config ${core} general_log "${ENABLE_LOG_GENERAL_QUERY}"
+        create_logrotate mariadb-generalquery "${LOG_PATH}"/"${LOG_FILE_GENERAL_QUERY}" none mariadb mariadb
+    fi
+
+    if var_true "${ENABLE_LOG_SLOW_QUERY}" ; then
+        truefalse_onezero ENABLE_LOG_GENERAL_QUERY
+        update_config ${core} slow_query_log_log "${ENABLE_LOG_SLOW_QUERY}"
+        create_logrotate mariadb-slowquery "${LOG_PATH}"/"${LOG_FILE_SLOW_QUERY}" none mariadb mariadb
+    fi
+
+    chmod -R 0750 "${CONFIG_PATH}"
+}
+
+mariadb_configure_monitoring() {
+    if var_true "${CONTAINER_ENABLE_MONITORING}" ; then
+        source /container/defaults/03-monitoring
+        case "${CONTAINER_MONITORING_BACKEND,,}" in
+            "zabbix" )
+                monitoring_init_file=$(sudo -u mariadb mktemp)
+                monitor_password=$(pwgen 32 1 -s -v)
+                cat <<EOSQL | silent sudo -u mariadb tee "${monitoring_init_file}"
+USE mysql;
+DELETE FROM mysql.user WHERE User='zbx_monitor';
+FLUSH PRIVILEGES;
+CREATE USER 'zbx_monitor'@'%' IDENTIFIED BY '${monitor_password}';
+CREATE USER 'zbx_monitor'@'127.0.0.1' IDENTIFIED BY '${monitor_password}';
+CREATE USER 'zbx_monitor'@'localhost' IDENTIFIED BY '${monitor_password}';
+FLUSH PRIVILEGES;
+GRANT REPLICATION CLIENT,PROCESS,SHOW DATABASES,SHOW VIEW ON *.* TO 'zbx_monitor'@'%';
+GRANT REPLICATION CLIENT,PROCESS,SHOW DATABASES,SHOW VIEW ON *.* TO 'zbx_monitor'@'127.0.0.1';
+GRANT REPLICATION CLIENT,PROCESS,SHOW DATABASES,SHOW VIEW ON *.* TO 'zbx_monitor'@'localhost';
+EOSQL
+
+                mariadb_control_server start "--init-file=${monitoring_init_file}"
+                mariadb_control_server stop
+                rm -f "${monitoring_init_file}"
+
+                print_debug "Configuring modern Zabbix agent"
+                mariadb_autoreg=mariadb
+                mariadb_config=$(cat <<EOF
+Plugins.Mysql.Sessions.toi.Uri=unix:${SOCKET_PATH}/${SOCKET_FILE}
+Plugins.Mysql.Sessions.toi.User=zbx_monitor
+Plugins.Mysql.Sessions.toi.Password=${monitor_password}
+EOF
+                                )
+
+                cat <<EOF | silent tee "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/nfrastack_mariadb.conf
+# Zabbix MariaDB Configuration - Automatically Generated
+# Find Companion Zabbix Server Templates at https://github.com/nfrastack/container-mariadb
+# Autoregister=${mariadb_autoreg}
+
+${mariadb_config}
+EOF
+
+                chmod 700 "${ZABBIX_CONFIG_PATH%/}"/"${ZABBIX_CONFIG_FILE}.d"/nfrastack_mariadb.conf
+                chown zabbix:root "${ZABBIX_CONFIG_PATH%/}"/"${ZABBIX_CONFIG_FILE}.d"/nfrastack_mariadb.conf
+            ;;
+        esac
+    fi
+}
+
+mariadb_control_server() {
+    case "${1}" in
+        start )
+            if [ "${2}" != "--skip-grant-tables" ] ; then sanity_var "ROOT_PASS" "ROOT Password" ; fi
+            TZ=${TIMEZONE} silent s6-setuidgid mariadb \
+                                                        /usr/bin/mariadbd \
+                                                                        --defaults-file=/etc/my.cnf \
+                                                                        --skip-name-resolve \
+                                                                        --skip-networking=on \
+                                                                        --user=mariadb ${2} > /dev/null &
+
+            wait_for_socket "${SOCKET_PATH}"/"${SOCKET_FILE}"
+        ;;
+        stop )
+            export MYSQL_PWD="${ROOT_PASS}"
+            TZ=${TIMEZONE} silent s6-setuidgid mariadb \
+                                                        mariadb-admin \
+                                                                    --socket "${SOCKET_PATH%/}"/"${SOCKET_FILE}" \
+                                                                    -uroot \
+                                                                    shutdown
+#-p"${ROOT_PASS}" \ --- IGNORE ---
+            unset MYSQL_PWD
+        ;;
+    esac
+}
+
+mariadb_create_databases() {
+    if var_true "${CREATE_DB}" ; then
+        create_database() {
+            local i="${1}"
+            i=$(printf "%02d" $i)
+            transform_var file \
+                                DB${i}_NAME \
+                                DB${i}_USER \
+                                DB${i}_PASS
+
+            DB_NAME=DB${i}_NAME
+            DB_USER=DB${i}_USER
+            DB_PASS=DB${i}_PASS
+
+            if [ -n "${!DB_NAME}" ] ; then
+                if ! silent mariadb -uroot --skip-column-names -e "use ${!DB_NAME};" ; then
+                    print_notice "[create_databases] Creating Database: '${!DB_NAME}'"
+                    cat <<EOF | silent sudo -u mariadb tee -a "${database_init_file}"
+CREATE DATABASE IF NOT EXISTS \`${!DB_NAME}\` CHARACTER SET ${DB_CHARACTER_SET} COLLATE ${DB_COLLATION};
+EOF
+                fi
+
+                if [ -n "${!DB_USER}" ] && [ -n "${!DB_PASS}" ] ; then
+                        cat <<EOF | silent sudo -u mariadb tee -a "${database_init_file}"
+GRANT ALL ON \`${!DB_NAME}\`.* TO '${!DB_USER}'@'%' IDENTIFIED BY '${!DB_PASS}';
+GRANT ALL ON \`${!DB_NAME}\`.* TO '${!DB_USER}'@'127.0.0.1' IDENTIFIED BY '${!DB_PASS}';
+GRANT ALL ON \`${!DB_NAME}\`.* TO '${!DB_USER}'@'localhost' IDENTIFIED BY '${!DB_PASS}';
+EOF
+                fi
+            fi
+        }
+
+        mariadb_control_server start "--skip-grant-tables"
+        transform_var file \
+                            DB_NAME \
+                            DB_USER \
+                            DB_PASS
+        if [ -n "${DB_NAME}" ] && [ -z "${DB01_NAME}" ] ; then export DB01_NAME="${DB_NAME}" ; unset DB_NAME ; fi
+        if [ -n "${DB_USER}" ] && [ -z "${DB01_USER}" ] ; then export DB01_USER="${DB_USER}" ; unset DB_USER ; fi
+        if [ -n "${DB_PASS}" ] && [ -z "${DB01_PASS}" ] ; then export DB01_PASS="${DB_PASS}" ; unset DB_PASS ; fi
+        database_init_file=$(sudo -u mariadb mktemp)
+        floop "$(printenv | sort | grep -cE '^DB([0-9].)_NAME')" create_database EMAN_BD
+        echo "FLUSH PRIVILEGES" | silent sudo -u mariadb tee -a "${database_init_file}"
+        mariadb_control_server stop
+        mariadb_control_server start "--init-file=${database_init_file}"
+        mariadb_control_server stop
+        rm -f "${database_init_file}"
+    fi
+}
+
+mariadb_initialize_engine() {
+    init_file=$(sudo -u mariadb mktemp)
+    MARIADB_VERSION=$(mariadb --version | awk '{print $3}' | cut -d'-' -f1)
+    if [ -d "${DATA_PATH%/}"/mysql ]; then
+        print_debug "MariaDB directory already present, skipping database creation"
+        touch "${DATA_PATH%/}"/.version
+        mariadb_run_major="$(echo "${MARIADB_VERSION}" | cut -d . -f 1,2)"
+        mariadb_file_major="$(head -n 1 "${DATA_PATH%/}"/.version | awk '{print $1}' | cut -d . -f 1,2)"
+        if [ "${mariadb_run_major}" != "${mariadb_file_major}" ] ; then
+            print_warn "Data Files Major version: '${mariadb_file_major}', but image runtime major version: '${mariadb_run_major}'"
+            if var_true "${DB_AUTO_UPGRADE}" ; then
+                if [ -n "${ROOT_PASS}" ] ; then
+                    print_notice "Upgrading database files to '${MARIADB_VERSION}' version"
+                    mariadb_control_server start "--skip-grant-tables"
+                    sanity_db
+                    silent sudo -u mariadb \
+                                        mariadb-upgrade \
+                                                    -uroot \
+                                                    --silent
+                    exitcode_upgrade=$?
+                    mariadb_control_server stop
+                    if [ "${exitcode_upgrade}" != "0" ] ; then
+                        print_error "MariaDB Upgrade failed with exit code '${exitcode_upgrade}'. Halting initialization. Leaving MariaDB background process running.."
+                        exit 1
+                    fi
+                    echo "${MARIADB_VERSION} upgraded on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')" | cat - "${DATA_PATH%/}"/.version > /tmp/.version && mv /tmp/.version "${DATA_PATH%/}"/.version
+                    chown -R root:root "${DATA_PATH%/}"/.version
+                else
+                    print_warn "Can't upgrade to '${MARIADB_VERSION}' as I don't know the ROOT PASS"
+                fi
+            else
+                print_warn "Skipping upgrading databases to ${MARIADB_VERSION} version"
+            fi
+        fi
+
+        if [ "${mariadb_run_major}" != "$(head -n 1 "${DATA_PATH%/}"/.version | awk '{print $1}' | cut -d . -f 1,2)" ]; then
+            print_warn "Installed version: '$(head -n 1 "${DATA_PATH%/}"/.version | awk '{print $1}')', but image version: '${MARIADB_VERSION}'"
+            print_warn "Consider running mariadb-upgrade"
+            echo "${MARIADB_VERSION} started being used without executing 'mariadb-upgrade' on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')" | cat - "${DATA_PATH%/}"/.version > /tmp/.version && mv /tmp/.version "${DATA_PATH%/}"/.version
+        fi
+
+        #chown -R mariadb:mariadb "${DATA_PATH}"
+    else
+        print_warn "MariaDB data directory is not found, creating initial DB(s)"
+        sanity_var ROOT_PASS "Root Password"
+
+        silent s6-setuidgid mariadb mariadb-install-db \
+                                                    --user=mariadb \
+                                                    --basedir=/usr \
+                                                    --datadir="${DATA_PATH}" \
+                                                    --defaults-file=/etc/my.cnf \
+                                                    --auth-root-authentication-method=normal > /dev/null
+
+        cat <<EOSQL | silent sudo -u mariadb tee "${init_file}"
+USE mysql;
+DELETE FROM mysql.user WHERE User='';
+FLUSH PRIVILEGES;
+GRANT ALL ON *.* TO 'root'@'%' identified by '$ROOT_PASS' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'root'@'127.0.0.1' identified by '$ROOT_PASS' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'root'@'localhost' identified by '$ROOT_PASS' WITH GRANT OPTION;
+SET PASSWORD FOR 'root'@'127.0.0.1'=PASSWORD('${ROOT_PASS}');
+SET PASSWORD FOR 'root'@'localhost'=PASSWORD('${ROOT_PASS}');
+SET PASSWORD FOR 'root'@'%'=PASSWORD('${ROOT_PASS}');
+DROP DATABASE IF EXISTS test;
+EOSQL
+
+        chown mariadb:mariadb "${init_file}"
+
+        if [ -n "${INIT_FILE}" ] ; then
+            init_import_file=${INIT_FILE}
+            chown mariadb:mariadb "${INIT_FILE}"
+        else
+            init_import_file="${init_file}"
+        fi
+        silent s6-setuidgid mariadb \
+                                mariadbd \
+                                    --bootstrap \
+                                    --skip-name-resolve \
+                                    --skip-networking=on \
+                                    --user=mariadb \
+                                    < "${init_import_file}"
+
+        echo "${MARIADB_VERSION} first installed on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')" | silent tee "${DATA_PATH%/}"/.version
+    fi
+    rm -rf "${init_file}"
+}
+

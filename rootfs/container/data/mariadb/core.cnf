@@ -1,0 +1,22 @@
+# nfrastack/mariadb core configuration options
+# Automatically configured on container start
+# Create additional config files with format <name>.cnf
+
+[client]
+socket = {{SOCKET_PATH}}/{{SOCKET_FILE}}
+port = {{LISTEN_PORT}}
+default-character-set = {{DB_CHARACTER_SET}}
+
+[mysqld]
+socket = {{SOCKET_PATH}}/{{SOCKET_FILE}}
+port = {{LISTEN_PORT}}
+datadir = {{DATA_PATH}}
+character-set-server = {{DB_CHARACTER_SET}}
+collation-server = {{DB_COLLATION}}
+skip-name-resolve
+log_error = {{LOG_PATH}}/{{LOG_FILE_ERROR}}
+log_warnings = {{LOG_LEVEL}}
+general_log = 0
+general_log_file = {{LOG_PATH}}/{{LOG_FILE_GENERAL_QUERY}}
+slow_query_log = 0
+slow_query_log_file = {{LOG_PATH}}/{{LOG_FILE_SLOW_QUERY}}

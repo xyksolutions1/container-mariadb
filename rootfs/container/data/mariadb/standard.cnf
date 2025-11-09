@@ -1,0 +1,59 @@
+[myisamchk]
+key_buffer_size = 20M
+sort_buffer_size = 20M
+read_buffer = 2M
+write_buffer = 2M
+
+[mysql]
+no-auto-rehash
+
+[mysqld_safe]
+nice = 0
+
+[mysqld]
+bulk_insert_buffer_size = 16M
+character-set-client-handshake = FALSE
+connect_timeout = 5
+max_connections = 100
+max_heap_table_size = 32M
+tmp_table_size = 32M
+wait_timeout = 600
+
+###  MyISAM
+expire_logs_days = 10
+key_buffer_size = 128M
+long_query_time = 10
+max_allowed_packet = 16M
+myisam_recover_options = BACKUP
+myisam_sort_buffer_size = 512M
+net_buffer_length = 16K
+query_cache_limit = 128K
+query_cache_size = 64M
+read_buffer_size = 2M
+read_rnd_buffer_size = 1M
+skip-external-locking
+sort_buffer_size = 4M
+table_open_cache = 400
+
+###  InnoDB
+#### InnoDB is enabled by default with a 10MB datafile in /var/lib/mariadb/.
+default_storage_engine = InnoDB
+#### you can't just change log file size, requires special procedure
+#innodb_log_file_size = 50M
+innodb_buffer_pool_size = 256M
+innodb_file_per_table = 1
+innodb_flush_method = fsync
+innodb_io_capacity = 400
+innodb_log_buffer_size = 8M
+innodb_open_files = 400
+
+server-id = 1
+
+[mysqldump]
+max_allowed_packet = 16M
+quick
+quote-names
+
+
+[mysqlhotcopy]
+interactive-timeout

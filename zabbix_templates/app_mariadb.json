@@ -17,7 +17,7 @@
                 "uuid": "4904f84303c74c5e955b7849730c3155",
                 "template": "MySQL",
                 "name": "MySQL | MariaDB",
-                "description": "Template for Docker MySQL/MariaDB\n\nMeant for use specifically with https://github.com/tiredofit/docker-mariadb > 4.0.0",
+                "description": "Template for Docker MySQL/MariaDB\n\nMeant for use specifically with https://github.com/nfrastack/container-mariadb > 4.0.0",
                 "groups": [
                     {
                         "name": "DB/SQL"

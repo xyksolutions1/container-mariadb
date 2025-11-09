@@ -1,3 +1,12 @@
+## 10.11-4.0.0pre 2025-11-09 <code at nfrastack dot com>
+
+   ### Added
+      - Change base image
+      - Change environment variables
+      - Change paths
+      - Change config structure
+      - MariaDB 10.11.15
+
 ## 10.11-3.2.99 2025-11-09 <dave at tiredofit dot ca>
 
 Add EOL notice and deprecate image

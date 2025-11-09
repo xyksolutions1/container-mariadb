@@ -112,8 +112,7 @@ Below is the complete list of available options that can be used to customize yo
 | -------------------- | ------------------------------------------------------------ | --------------- |
 | `CERT_PATH`          | Certs Path                                                   |                 |
 | `CONFIG_FILE`        | (optional) Configuration File to load - Not needed to be set | `mariadb.cnf`   |
-| `CONFIG_PATH`        | (optional) Configuration Path                                | `/etc/mariadb/` |
-| `CONFIG_CUSTOM_PATH` | Configuration Override Path                                  | `/config/`      |
+| `CONFIG_PATH`        | (optional) Configuration Path                                | `/config/`      |
 | `DATA_PATH`          | Data Files Path                                              | `/data/`        |
 | `LOG_PATH`           | Log Files Path                                               | `/logs/`        |
 | `SOCKET_FILE`        | Socket Name                                                  | `mariadbd.sock` |

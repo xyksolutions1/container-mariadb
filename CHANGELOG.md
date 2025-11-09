@@ -1,7 +1,11 @@
-## 11.8-3.2.99 2025-11-09 <dave at tiredofit dot ca>
+## 11.8-4.0.0pre 2025-11-09 <code at nfrastack dot com>
 
-Add EOL Notice and deprecate image
-
+   ### Added
+      - Change base image
+      - Change environment variables
+      - Change paths
+      - Change config structure
+      - MariaDB 11.8.4
 
 ## 11.8-3.2.21 2025-08-06 <dave at tiredofit dot ca>
 

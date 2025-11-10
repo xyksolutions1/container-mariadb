@@ -87,7 +87,7 @@ mariadb_configure_daemon() {
 
     case "${CONFIG_PROFILE,,}" in
         blank | none | false )
-            mariadb_conf=blank.cnf
+            :
         ;;
         standard )
             mariadb_conf=standard.cnf
@@ -108,19 +108,6 @@ EOF
         cp -aR "/container/data/mariadb/${mariadb_conf}" "${CONFIG_PATH%/}/${CONFIG_FILE}"
         chown mariadb:mariadb "${CONFIG_PATH%/}"/"${CONFIG_FILE}"
     fi
-
-    #chown mariadb:mariadb "${CONFIG_PATH%/}"/"${CONFIG_FILE}"
-#    update_template "${CONFIG_PATH%/}"/"${CONFIG_FILE}" \
-#                                                        DATA_PATH \
-#                                                        DB_CHARACTER_SET \
-#                                                        DB_COLLATION \
-#                                                        LISTEN_PORT \
-#                                                        LOG_FILE_ERROR \
-#                                                        LOG_FILE_GENERAL_QUERY \
-#                                                        LOG_FILE_SLOW_QUERY \
-#                                                        LOG_PATH \
-#                                                        SOCKET_FILE \
-#                                                        SOCKET_PATH
 
     update_config ${core} port "${LISTEN_PORT}"
     update_config ${core} socket "${SOCKET_PATH%/}/${SOCKET_FILE}"
@@ -222,7 +209,6 @@ mariadb_control_server() {
                                                                     --socket "${SOCKET_PATH%/}"/"${SOCKET_FILE}" \
                                                                     -uroot \
                                                                     shutdown
-#-p"${ROOT_PASS}" \ --- IGNORE ---
             unset MYSQL_PWD
         ;;
     esac
@@ -318,8 +304,6 @@ mariadb_initialize_engine() {
             print_warn "Consider running mariadb-upgrade"
             echo "${MARIADB_VERSION} started being used without executing 'mariadb-upgrade' on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')" | cat - "${DATA_PATH%/}"/.version > /tmp/.version && mv /tmp/.version "${DATA_PATH%/}"/.version
         fi
-
-        #chown -R mariadb:mariadb "${DATA_PATH}"
     else
         print_warn "MariaDB data directory is not found, creating initial DB(s)"
         sanity_var ROOT_PASS "Root Password"

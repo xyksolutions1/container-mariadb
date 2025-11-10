@@ -169,7 +169,7 @@ RUN echo "" && \
         -DWITH_VALGRIND=OFF \
         -DWITH_ZLIB=system \
         && \
-    make -j$(( $nproc -1 )) && \
+    make -j $(( $(nproc) > 1 ? $(nproc) - 1 : 1 )) && \
     make install && \
     mkdir -p /etc/mariadb && \
     chown mariadb:mariadb /etc/mariadb && \

@@ -1,4 +1,4 @@
-# nfrastack/container-replace
+# nfrastack/container-mariadb
 
 ## About
 
@@ -39,15 +39,15 @@ This repository will build a container image for (https://mariadb.org). A relati
 
 ### Prebuilt Images
 
-Feature limited builds of the image are available on the [Github Container Registry](https://github.com/nfrastack/container-replace/pkgs/container/container-replace) and [Docker Hub](https://hub.docker.com/r/nfrastack/replace).
+Feature limited builds of the image are available on the [Github Container Registry](https://github.com/nfrastack/container-mariadb/pkgs/container/container-mariadb) and [Docker Hub](https://hub.docker.com/r/nfrastack/mariadb).
 
 To unlock advanced features, one must provide a code to be able to change specific environment variables from defaults. Support the development to gain access to a code.
 
 To get access to the image use your container orchestrator to pull from the following locations:
 
 ```
-ghcr.io/nfrastack/container-replace:(image_tag)
-docker.io/nfrastack/replace:(image_tag)
+ghcr.io/nfrastack/container-mariadb:(image_tag)
+docker.io/nfrastack/mariadb:(image_tag)
 ```
 
 Image tag syntax is:
@@ -55,11 +55,11 @@ Image tag syntax is:
 `<image>:<branch>-<optional tag>-<optional_distribution>_<optional_distribution_variant>`
 
 Example:
-`ghcr.io/nfrastack/container-replace:10.11` or optionally
+`ghcr.io/nfrastack/container-mariadb:10.11` or optionally
 
-`ghcr.io/nfrastack/container-replace:10.11-1.0` or optionally
+`ghcr.io/nfrastack/container-mariadb:10.11-1.0` or optionally
 
-`ghcr.io/nfrastack/container-replace:10.11-1.0-alpine` or optinally
+`ghcr.io/nfrastack/container-mariadb:10.11-1.0-alpine` or optinally
 
 
 - The `branch` will relate to the MAJOR eg `10` and MINOR `.11` release.

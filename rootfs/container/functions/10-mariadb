@@ -120,7 +120,7 @@ EOF
     update_config ${core} log_warnings "${LOG_LEVEL}"
 
     if var_true "${ENABLE_LOG_ERROR}" ; then
-        create_logrotate mariadb-error "${LOG_PATH}"/"${LOG_FILE_ERROR}" mariadb-error mariadb mariadb
+        create_logrotate mariadb-error "${LOG_PATH%/}"/"${LOG_FILE_ERROR}" mariadb-error mariadb mariadb
     else
         sed -i -e "s|log_error = .*|log_error = /dev/null|g" ${core}
     fi
@@ -128,13 +128,13 @@ EOF
     if var_true "${ENABLE_LOG_GENERAL_QUERY}" ; then
         truefalse_onezero ENABLE_LOG_GENERAL_QUERY
         update_config ${core} general_log "${ENABLE_LOG_GENERAL_QUERY}"
-        create_logrotate mariadb-generalquery "${LOG_PATH}"/"${LOG_FILE_GENERAL_QUERY}" none mariadb mariadb
+        create_logrotate mariadb-generalquery "${LOG_PATH%/}"/"${LOG_FILE_GENERAL_QUERY}" none mariadb mariadb
     fi
 
     if var_true "${ENABLE_LOG_SLOW_QUERY}" ; then
         truefalse_onezero ENABLE_LOG_GENERAL_QUERY
         update_config ${core} slow_query_log_log "${ENABLE_LOG_SLOW_QUERY}"
-        create_logrotate mariadb-slowquery "${LOG_PATH}"/"${LOG_FILE_SLOW_QUERY}" none mariadb mariadb
+        create_logrotate mariadb-slowquery "${LOG_PATH%/}"/"${LOG_FILE_SLOW_QUERY}" none mariadb mariadb
     fi
 
     chmod -R 0750 "${CONFIG_PATH}"
@@ -173,7 +173,7 @@ Plugins.Mysql.Sessions.toi.Password=${monitor_password}
 EOF
                                 )
 
-                cat <<EOF | silent tee "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/nfrastack_mariadb.conf
+                cat <<EOF | silent tee "${ZABBIX_CONFIG_PATH%/}"/"${ZABBIX_CONFIG_FILE}.d"/nfrastack_mariadb.conf
 # Zabbix MariaDB Configuration - Automatically Generated
 # Find Companion Zabbix Server Templates at https://github.com/nfrastack/container-mariadb
 # Autoregister=${mariadb_autoreg}
@@ -199,7 +199,7 @@ mariadb_control_server() {
                                                                         --skip-networking=on \
                                                                         --user=mariadb ${2} > /dev/null &
 
-            wait_for_socket "${SOCKET_PATH}"/"${SOCKET_FILE}"
+            wait_for_socket "${SOCKET_PATH%/}"/"${SOCKET_FILE}"
         ;;
         stop )
             export MYSQL_PWD="${ROOT_PASS}"

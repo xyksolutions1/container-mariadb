@@ -5,7 +5,7 @@
       - Change environment variables
       - Change paths
       - Change config structure
-      - MariaDB 11.8.4
+      - MariaDB 11.8.5
 
 ## 11.8-3.2.21 2025-08-06 <dave at tiredofit dot ca>
 

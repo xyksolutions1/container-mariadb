@@ -265,7 +265,7 @@ EOF
 
 mariadb_initialize_engine() {
     init_file=$(sudo -u mariadb mktemp)
-    MARIADB_VERSION=$(mariadb --version | awk '{print $3}' | cut -d'-' -f1)
+    MARIADB_VERSION=$(mariadbd --version | awk '{print $3}' | cut -d'-' -f1)
     if [ -d "${DATA_PATH%/}"/mysql ]; then
         print_debug "MariaDB directory already present, skipping database creation"
         touch "${DATA_PATH%/}"/.version

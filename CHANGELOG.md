@@ -1,11 +1,11 @@
-## 11.8-4.0.0pre 2025-11-09 <code at nfrastack dot com>
+## 10.6-5.0.0 2025-12-19 <code at nfrastack dot com>
 
    ### Added
       - Change base image
       - Change environment variables
       - Change paths
       - Change config structure
-      - MariaDB 11.8.4
+      - MariaDB 10.6.24
 
 ## 11.8-3.2.21 2025-08-06 <dave at tiredofit dot ca>
 

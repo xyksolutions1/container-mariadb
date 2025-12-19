@@ -1,4 +1,4 @@
-## 10.11-4.0.0pre 2025-11-09 <code at nfrastack dot com>
+## 10.11-5.0.0 2025-12-19 <code at nfrastack dot com>
 
    ### Added
       - Change base image

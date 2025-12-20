@@ -1,3 +1,10 @@
+## 11.4-5.0.1 2025-12-20 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix defaults loading
+      - Add pwgen package
+
+
 ## 11.4-5.0.0 2025-12-19 <code at nfrastack dot com>
 
    ### Added

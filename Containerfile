@@ -68,6 +68,7 @@ RUN echo "" && \
                                libstdc++ \
                                libxml2 \
                                proj \
+                               pwgen \
                             " \
                             && \
     \

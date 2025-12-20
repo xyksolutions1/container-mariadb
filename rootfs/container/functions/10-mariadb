@@ -142,7 +142,7 @@ EOF
 
 mariadb_configure_monitoring() {
     if var_true "${CONTAINER_ENABLE_MONITORING}" ; then
-        source /container/defaults/03-monitoring
+        source /container/base/defaults/03-monitoring
         case "${CONTAINER_MONITORING_BACKEND,,}" in
             "zabbix" )
                 monitoring_init_file=$(sudo -u mariadb mktemp)

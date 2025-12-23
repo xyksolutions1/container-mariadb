@@ -1,3 +1,9 @@
+## 11.4-5.0.2 2025-12-23 <code at nfastack dot com>
+
+   ### Changed
+      - Fix issue with monitoring
+
+
 ## 11.4-5.0.1 2025-12-20 <dave at tiredofit dot ca>
 
    ### Changed

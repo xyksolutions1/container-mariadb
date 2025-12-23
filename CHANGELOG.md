@@ -1,3 +1,9 @@
+## 10.6-5.0.2 2025-12-23 <code at nfastack dot com>
+
+   ### Changed
+      - Repair monitoring issue
+
+
 ## 10.6-5.0.1 2025-12-20 <dave at tiredofit dot ca>
 
    ### Changed

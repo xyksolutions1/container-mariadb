@@ -101,6 +101,7 @@ mariadb_configure_daemon() {
 EOF
     if [ ! -f "${CONFIG_PATH%/}"/00-core.cnf ] ; then
         cp -aR /container/data/mariadb/core.cnf "${CONFIG_PATH%/}"/00-core.cnf
+        chown mariadb:mariadb "${CONFIG_PATH%/}"/00-core.cnf
     fi
 
     if [ ! -f "${CONFIG_PATH%/}/${CONFIG_FILE}" ] && [[ ! "${CONFIG_PROFILE,,}" =~ ^(blank|none|false)$ ]]; then

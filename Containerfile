@@ -81,7 +81,7 @@ RUN echo "" && \
     source /container/base/functions/container/build && \
     container_build_log image && \
     create_user mariadb 3306 mariadb 3306 /dev/null && \
-    addgroup zabbix mariadb && \
+    add_user_group zabbix mariadb && \
     package update && \
     package upgrade && \
     package install \

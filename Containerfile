@@ -174,6 +174,7 @@ RUN echo "" && \
     make install && \
     mkdir -p /etc/mariadb && \
     chown mariadb:mariadb /etc/mariadb && \
+    chown -R mariadb:mariadb /container/data/mariadb && \
     container_build_log add "MariaDB" "${MARIADB_VERSION}" "${MARIADB_REPO_URL}" && \
     \
     clone_git_repo "${MYSQLTUNER_REPO_URL}" "${MYSQLTUNER_VERSION}" && \

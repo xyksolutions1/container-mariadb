@@ -1,3 +1,10 @@
+## 10.6-5.0.3 2026-02-04 <code at nfastack dot com>
+
+   ### Added
+      - MariaDB 10.6.25
+      - Alpine 3.23 base
+
+
 ## 10.6-5.0.2 2025-12-23 <code at nfastack dot com>
 
    ### Changed

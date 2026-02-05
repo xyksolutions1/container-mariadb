@@ -95,6 +95,7 @@ RUN echo "" && \
     mkdir -p /tmp/_ && \
     cmake . \
         -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DCOMMON_C_FLAGS="-O3 -s -fno-omit-frame-pointer -pipe" \
         -DCOMMON_CXX_FLAGS="-O3 -s -fno-omit-frame-pointer -pipe" \
         -DCMAKE_INSTALL_PREFIX=/usr \

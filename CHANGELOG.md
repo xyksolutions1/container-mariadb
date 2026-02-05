@@ -1,3 +1,9 @@
+## 11.8-5.0.4 2026-02-05 <code at nfastack dot com>
+
+   ### Changed
+      - Allow compilation with gcc 15
+
+
 ## 11.8-5.0.3 2026-02-04 <code at nfastack dot com>
 
    ### Added

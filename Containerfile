@@ -91,6 +91,7 @@ RUN echo "" && \
                         && \
     clone_git_repo "${MARIADB_REPO_URL}" "mariadb-${MARIADB_VERSION}" && \
     sed -i 's/END()/ENDIF()/' libmariadb/cmake/ConnectorName.cmake && \
+    sed -i "\@#include <string>@a#include <cstdint>" wsrep-lib/include/wsrep/provider_options.hpp && \    
     mkdir -p /tmp/_ && \
     cmake . \
         -DCMAKE_BUILD_TYPE=MinSizeRel \
